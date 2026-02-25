@@ -11,4 +11,4 @@ console.log("Lara: Acting from the new tab...");
     
     // 4. إغلاق النافذة الجديدة فوراً لكي لا يشعر المستخدم بشيء
     // window.close(); 
-}
+
